@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Doctors - Doctor Appointment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .doctor-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .doctor-card:hover {
+            transform: translateY(-5px);
+        }
+        .doctor-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        .doctor-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .doctor-specialty {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .doctor-details {
+            margin-bottom: 15px;
+        }
+        .doctor-details p {
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .doctor-details strong {
+            color: #333;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-available {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #5568d3;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 10px;
+        }
+        .empty-state p {
+            color: #666;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🏥 Doctor Appointment</h1>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'doctor_list' %}">Find Doctors</a>
+            <a href="{% url 'my_appointments' %}">My Appointments</a>
+            <a href="{% url 'logout' %}">Logout ({{ user.username }})</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Available Doctors</h2>
+        
+        {% if doctors %}
+            <div class="doctors-grid">
+                {% for doctor in doctors %}
+                    <div class="doctor-card">
+                        <div class="doctor-header">
+                            <div class="doctor-avatar">
+                                {{ doctor.name|slice:":1" }}
+                            </div>
+                            <div class="doctor-info">
+                                <h3>Dr. {{ doctor.name }}</h3>
+                                <span class="doctor-specialty">{{ doctor.specialization }}</span>
+                            </div>
+                        </div>
+                        <div class="doctor-details">
+                            <p><strong>📧 Email:</strong> {{ doctor.email }}</p>
+                            <p><strong>📞 Phone:</strong> {{ doctor.phone }}</p>
+                            <p><strong>📅 Available:</strong> {{ doctor.available_days }}</p>
+                            <p><strong>🕐 Time:</strong> {{ doctor.available_time_start }} - {{ doctor.available_time_end }}</p>
+                        </div>
+                        <a href="{% url 'book_appointment' doctor.id %}" class="btn">Book Appointment</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p>No doctors available at the moment. Please check back later.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

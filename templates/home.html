@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Appointment System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .navbar h1 {
+            color: #667eea;
+            font-size: 24px;
+        }
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+        .hero {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .cta-buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        .auth-links {
+            margin-top: 20px;
+            color: white;
+        }
+        .auth-links a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🏥 Doctor Appointment</h1>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'doctor_list' %}">Find Doctors</a>
+                <a href="{% url 'my_appointments' %}">My Appointments</a>
+                <a href="{% url 'logout' %}">Logout ({{ user.username }})</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Welcome to Doctor Appointment System</h1>
+            <p>Book appointments with top doctors in just a few clicks</p>
+            
+            <div class="cta-buttons">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'doctor_list' %}" class="btn btn-primary">Find a Doctor</a>
+                    <a href="{% url 'my_appointments' %}" class="btn btn-secondary">View My Appointments</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                    <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+                {% endif %}
+            </div>
+            
+            {% if not user.is_authenticated %}
+                <div class="auth-links">
+                    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>🩺 Expert Doctors</h3>
+                <p>Access to qualified and experienced medical professionals across various specializations.</p>
+            </div>
+            <div class="feature-card">
+                <h3>📅 Easy Booking</h3>
+                <p>Simple and quick appointment scheduling at your convenience, 24/7.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⏰ Real-time Availability</h3>
+                <p>See doctor availability in real-time and choose the time that suits you best.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
